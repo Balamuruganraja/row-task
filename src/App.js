@@ -1,85 +1,109 @@
 import logo from './logo.svg';
 import './App.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TextFields from './components/TextFields';
 
 function App() {
-  const [data,setData] = useState([])
+  const [data,setData] = useState([{}])
+  const [isClicked,SetClicked] = useState(false)
   const [todo,setTodo] = useState([])
-  const [err,setErr] = useState([{name:"",email:"",mobile:"",pan:""}]) 
-  const [allElement,setElement]=useState([])
-
-  const inputChange=(e,i)=>{
-    console.log(i);
-    const id=e.target.id
-    const val=e.target.value
-    let dupli=[...data]
-    let duplliobj={...dupli[i?i:0],[id]:val}
-    console.log(duplliobj,dupli);
-    dupli[i?i:0]=duplliobj;
-      setData(dupli)
-      // console.log(data);
+  const [err,setErr] = useState([{name:false,email:false,mobile:false,pan:false}]) 
+  const [allElement,setElement]=useState([{Row:TextFields}])
+  
+   let errorCheck=(element,index)=>{
+     setErr(err.map((errData,i)=>{
+      console.log(errData);
+      if(i==index){
+        return {
+          name:element.name?false:true,
+          email:element.email&&/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(element.email)?false:true,
+          mobile:element.mobile?false:true,
+          pan:element.pan?false:true,
+        }
+      }else{
+        return errData
+      }
+    }))
+    
+     return element.name&&element.email&&/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(element.email)&&element.mobile&&element.pan;
     }
-    const save=(e,i)=>{
-      if(data.length){
-
-      
-      for (let index = 0; index < data.length+1; index++) {
-        const element = data[index];
-
-        if(Object.keys(element).length!==0&&element.name&&element.email&&element.mobile&&element.pan){
-          setTodo((prev)=>[...prev,...data])
-          setErr([{name:"",email:"",mobile:"",pan:""}])    
+   let clearError=(index)=>{
+    setData(data.map((inputData,i)=>{
+      if(i==index){
+      setErr(err.map((errData,i)=>{
+        if(i==index){
+          return {
+            name:false,
+            email:false,
+            mobile:false,
+            pan:false
+          }
         }else{
-          let error=[...err]
-        error[index]={
-          name:!element.name&&"Name cannot be empty",
-          email:!element.email&&"Email cannot be empty",
-          mobile:!element.mobile&&"Mobile cannot be empty",
-          pan:!element.pan&&"Pan cannot be empty"}
-         setErr(error)
-         console.log(err,error);
-        }  
-      }
-    }else{
-        let error=[...err]
-        error[0]={
-          name:"Name cannot be empty",
-          email:"Email cannot be empty",
-          mobile:"Mobile cannot be empty",
-          pan:"Pan cannot be empty"}
-         setErr(error)
-      }
-         
-      e.preventDefault()   
-  }
+          return errData
+        }
+      }))}
+     }))
+    }
+    let clearField=(index)=>{
+      setData(data.map((inputData,i)=>{
+        if(i==index){
+          return {
+            name:"",
+            email:"",
+            mobile:"",
+            pan:""
+          }
+        }else{
+          return inputData
+        }
+      }))
+    }
+    const save=(e)=>{  
+     data.forEach((element,index) => {
+       if(errorCheck(element,index)){
+         setTodo((prev)=>[...prev,element])
+         clearError(index)
+         clearField(index)         
+         console.log(todo); 
+     }
+      
+    });
+    e.preventDefault()
+    }
+      
+
 
   const addRow=()=>{
-   setElement((prev)=>[...prev,prev.length+1])
-   setData((prev)=>{
-    return [...prev,{}]
-   })
-   setErr((prev)=>{
-    return [...prev,{}]
-   })
+    setElement((prev)=>[...prev,{Row:TextFields}])
+    setData((prev)=>{
+      return [...prev,{}]
+    })
+    setErr((prev)=>{
+      return [...prev,{}]
+    })
   }
 
   return (
     <div className="App">
-  <TextFields
-  inputChange={inputChange}
-  err={err[0]}
-  addRow={addRow}
-  />
-  {allElement.length?allElement.map(({Duplicate},i)=> <TextFields
+ 
+  {allElement.length?allElement.map(({Row},i)=> <Row
+  value={data[i]}
   key={i}
-  inputChange={(e)=>inputChange(e,i+1)}
-  err={err[i+1]}
+  inputChange={(e)=>{
+    const id=e.target.id
+    const val=e.target.value
+    let dupli=[...data]
+    let duplliobj={...dupli[i],[id]:val}
+    dupli[i]=duplliobj;
+      setData(dupli)
+
+    }}
+  err={err[i]}
   addRow={addRow}
   />):""}
-      <button onClick={(e)=>save(e,allElement.map(({Duplicate},i)=>i+1))} className='mrgTop' >SAVE</button>
+      <button onClick={save} className='mrgTop' >SAVE</button>
       <div className='flex'> 
-      <table >
+     { todo.length!==0?<table >
             <thead >
               <tr>
                 <th>Name</th>
@@ -88,20 +112,22 @@ function App() {
                 <th>Pan</th>
               </tr>
             </thead>
-        {todo.length>0&&todo.map((e)=><tr>
+      {todo.map((e)=>
+        Object.keys(e).length!==0?<tr>
           <td>{e.name}</td>
           <td>{e.email}</td>
           <td>{e.mobile}</td>
           <td>{e.pan}</td>
-        </tr>
-        )
-}
+        </tr>:""
+        )}
+
           
-          </table>
+          </table>:<h1> No data Found</h1>}
         
       </div>
     </div>
   );
-}
+      }
+
 
 export default App;

@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.error{
+  border: 1px solid red;
+}
+/* .error:focus,.error:link,.error:hover{
+  border: 1px solid red;
+} */
