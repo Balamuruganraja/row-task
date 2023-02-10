@@ -5,7 +5,6 @@ import TextFields from './components/TextFields';
 
 function App() {
   const [data,setData] = useState([{}])
-  const [isClicked,SetClicked] = useState(false)
   const [todo,setTodo] = useState([])
   const [err,setErr] = useState([{name:false,email:false,mobile:false,pan:false}]) 
   const [allElement,setElement]=useState([{Row:TextFields}])
@@ -101,28 +100,30 @@ function App() {
   err={err[i]}
   addRow={addRow}
   />):""}
-      <button onClick={save} className='mrgTop' >SAVE</button>
+      <button onClick={save} className='mrgTop'>SAVE</button>
       <div className='flex'> 
-     { todo.length!==0?<table >
-            <thead >
-              <tr>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Pan</th>
-              </tr>
-            </thead>
-      {todo.map((e)=>
-        Object.keys(e).length!==0?<tr>
-          <td>{e.name}</td>
+     { todo.length!==0?
+    <table class="table table-hover mrgTop">
+     <thead>
+     <tr>
+          <th scope='col'>Name</th>
+          <th scope='col'>Email</th>
+          <th scope='col'>Phone</th>
+          <th scope='col'>Pan</th>
+    </tr>
+  </thead>
+  <tbody>
+  {todo.map((e)=>
+        Object.keys(e).length!==0?<tr >
+          <td scope='row'>{e.name}</td>
           <td>{e.email}</td>
           <td>{e.mobile}</td>
           <td>{e.pan}</td>
         </tr>:""
         )}
+  </tbody>
+  </table>:<h2 className='mrgTop'> No data Found</h2>}
 
-          
-          </table>:<h1> No data Found</h1>}
         
       </div>
     </div>

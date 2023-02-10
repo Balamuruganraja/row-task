@@ -37,15 +37,25 @@
   }
 }
 
-.grid{
+.gridmob{
   display:grid;
-  grid-template-columns: repeat(5,1fr);
-  grid-gap: 10px;
+  grid-gap: 25px;
   justify-content: center;
   text-align: center;
   align-items: flex-start;
   justify-items: center;
   padding-top: 50px;
+  margin-left: 10px;
+}
+@media screen and(max-width:768px) {
+  .gridCol{
+  grid-template-columns: repeat(1,1fr);
+  }  
+}
+@media screen and (min-width:769px) {
+  .gridCol{
+  grid-template-columns: repeat(5,1fr);
+  } 
 }
 
 .padAll{
@@ -67,11 +77,8 @@ button{
   display: flex;
   flex-direction: column;
 }
-
-table,th,td{
-  border: 1px solid black;
-  border-collapse: collapse;
-  margin: 20px;
+table{
+  border: 1px solid gray;
 }
 p{
   color: red;

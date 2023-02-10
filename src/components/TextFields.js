@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 const TextFields =(props)=>{
-return ( <div className="grid">
+return ( <div className="gridmob gridCol">
 <div>
 <input className={`padAll ${props.err.name?"error":""}`} id='name' type="text" value={props.value?props.value.name:""} onChange={props.inputChange} placeholder='Name' />
 </div>
