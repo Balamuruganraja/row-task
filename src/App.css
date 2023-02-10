@@ -81,6 +81,7 @@ button{
 }
 table{
   border: 1px solid gray;
+  word-break: break-all;
 }
 p{
   color: red;
