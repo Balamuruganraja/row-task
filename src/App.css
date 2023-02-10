@@ -76,6 +76,8 @@ button{
 .flex{
   display: flex;
   flex-direction: column;
+  width: 95vw;
+  padding-left: 20px;
 }
 table{
   border: 1px solid gray;
